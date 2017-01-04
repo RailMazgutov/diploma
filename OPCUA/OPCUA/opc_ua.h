@@ -1,4 +1,10 @@
 #pragma once
+#ifdef OPCUA_EXPORTS
+#define OPCUASERVER_API __declspec(dllexport) 
+#else
+#define OPCUASERVER_API __declspec(dllimport) 
+#endif
+
 #define NAME_MAX_LENGTH 100
 typedef bool Boolean;
 typedef unsigned char Byte;
@@ -67,4 +73,12 @@ struct OPCUA_Namespace
 	char name[NAME_MAX_LENGTH];
 };
 
-const OPCUA_Namespace* create_namespace(char* name);
+void OPCUASERVER_API set_endpoint(const char* endpoint);
+
+void OPCUASERVER_API set_server_uri(const char* uri);
+
+unsigned int OPCUASERVER_API create_namespace(char* name);
+
+void OPCUASERVER_API start_server();
+
+void OPCUASERVER_API stop_server();
