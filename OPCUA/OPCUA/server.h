@@ -100,3 +100,6 @@ size_t OPCUASERVER_API add_variable(OPCUA_Variable* variable);
 
 void OPCUASERVER_API alloc_variables(size_t count);
 
+void OPCUASERVER_API get_variable_value(OPCUA_Variable* variable);
+
+void OPCUASERVER_API get_variables_value(OPCUA_Variable* variables, size_t count);

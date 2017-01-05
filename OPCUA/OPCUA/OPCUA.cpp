@@ -193,3 +193,9 @@ void get_variable_value(OPCUA_Variable* variable)
 	}
 	}
 }
+
+void get_variables_value(OPCUA_Variable* variables, size_t count)
+{
+	for (int i = 0; i < count; i++)
+		get_variable_value(&variables[i]);
+}
