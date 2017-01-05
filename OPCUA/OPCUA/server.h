@@ -61,6 +61,7 @@ struct OPCUA_Variable
 
 	//Для идентификации
 	unsigned int id;
+	unsigned int parent_id;
 	unsigned int namespace_id;
 	//Для представления пользователю
 	char name[NAME_MAX_LENGTH];
@@ -73,12 +74,29 @@ struct OPCUA_Namespace
 	char name[NAME_MAX_LENGTH];
 };
 
+struct OPCUA_Node
+{
+	size_t id;
+	size_t namespace_id;
+	
+	bool has_parent_node;
+	size_t parent_node_id;
+};
 void OPCUASERVER_API set_endpoint(const char* endpoint);
 
 void OPCUASERVER_API set_server_uri(const char* uri);
 
-unsigned int OPCUASERVER_API create_namespace(char* name);
-
 void OPCUASERVER_API start_server();
 
 void OPCUASERVER_API stop_server();
+
+size_t OPCUASERVER_API create_namespace(char* name);
+
+size_t OPCUASERVER_API add_node(OPCUA_Node node, char* name);
+
+void OPCUASERVER_API alloc_nodes(size_t count);
+
+size_t OPCUASERVER_API add_variable(OPCUA_Variable* variable);
+
+void OPCUASERVER_API alloc_variables(size_t count);
+
