@@ -70,6 +70,7 @@ void alloc_variables(size_t count)
 {
 	variables.reserve(count);
 }
+
 size_t add_variable(OPCUA_Variable* variable)
 {
 	Node parent = nodes[variable->parent_id];
@@ -136,3 +137,59 @@ size_t add_variable(OPCUA_Variable* variable)
 	return variable->id;
 }
 
+void add_variables(OPCUA_Variable* variables, size_t count)
+{
+	for (int i = 0; i < count; i++)
+		add_variable(&variables[i]);
+}
+
+void get_variable_value(OPCUA_Variable* variable)
+{
+	switch (variable->type)
+	{
+	case(OPCUA_BOOLEAN): {
+		variable->value.bool_val = variables[variable->id].GetValue().As<Boolean>();
+		break;
+	}
+	case(OPCUA_BYTE): {
+		variable->value.byte_val = variables[variable->id].GetValue().As<Byte>();
+		break;
+	}
+	case(OPCUA_DOUBLE): {
+		variable->value.double_val = variables[variable->id].GetValue().As<Double>();
+		break;
+	}
+	case(OPCUA_FLOAT): {
+		variable->value.float_val = variables[variable->id].GetValue().As<Float>();
+		break;
+	}
+	case(OPCUA_INT16): {
+		variable->value.int16_val = variables[variable->id].GetValue().As<Int16>();
+		break;
+	}
+	case(OPCUA_INT32): {
+		variable->value.int32_val = variables[variable->id].GetValue().As<Int32>();
+		break;
+	}
+	case(OPCUA_INT64): {
+		variable->value.int64_val = variables[variable->id].GetValue().As<Int64>();
+		break;
+	}
+	case(OPCUA_LOCAL_TEXT): {
+		variable->value.local_text_val = variables[variable->id].GetValue().As<LocalText>();
+		break;
+	}
+	case(OPCUA_S_BYTE): {
+		variable->value.sbyte_val = variables[variable->id].GetValue().As<sByte>();
+		break;
+	}
+	case(OPCUA_UNIT16): {
+		variable->value.uint16_val = variables[variable->id].GetValue().As<UInt16>();
+		break;
+	}
+	case(OPCUA_UINT32): {
+		variable->value.uint32_val = variables[variable->id].GetValue().As<UInt32>();
+		break;
+	}
+	}
+}
