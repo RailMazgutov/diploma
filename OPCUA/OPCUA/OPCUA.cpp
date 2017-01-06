@@ -199,3 +199,54 @@ void get_variables_value(OPCUA_Variable* variables, size_t count)
 	for (int i = 0; i < count; i++)
 		get_variable_value(&variables[i]);
 }
+
+void set_variable_value(OPCUA_Variable* variable)
+{
+	switch (variable->type)
+	{
+	case(OPCUA_BOOLEAN): {
+		variables[variable->id].SetValue(variable->value.bool_val);
+		break;
+	}
+	case(OPCUA_BYTE): {
+		variables[variable->id].SetValue(variable->value.byte_val);
+		break;
+	}
+	case(OPCUA_DOUBLE): {
+		variables[variable->id].SetValue(variable->value.double_val);
+		break;
+	}
+	case(OPCUA_FLOAT): {
+		variables[variable->id].SetValue(variable->value.float_val);
+		break;
+	}
+	case(OPCUA_INT16): {
+		variables[variable->id].SetValue(variable->value.int16_val);
+		break;
+	}
+	case(OPCUA_INT32): {
+		variables[variable->id].SetValue(variable->value.int32_val);
+		break;
+	}
+	case(OPCUA_INT64): {
+		variables[variable->id].SetValue(variable->value.int64_val);
+		break;
+	}
+	case(OPCUA_LOCAL_TEXT): {
+		variables[variable->id].SetValue(variable->value.local_text_val);
+		break;
+	}
+	case(OPCUA_S_BYTE): {
+		variables[variable->id].SetValue(variable->value.sbyte_val);
+		break;
+	}
+	case(OPCUA_UNIT16): {
+		variables[variable->id].SetValue(variable->value.uint16_val);
+		break;
+	}
+	case(OPCUA_UINT32): {
+		variables[variable->id].SetValue(variable->value.uint32_val);
+		break;
+	}
+	}
+}

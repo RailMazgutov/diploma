@@ -6,7 +6,7 @@
 #endif
 
 #define NAME_MAX_LENGTH 100
-typedef bool Boolean;
+typedef int Boolean;
 typedef unsigned char Byte;
 typedef double Double;
 typedef float Float;
@@ -82,6 +82,7 @@ struct OPCUA_Node
 	bool has_parent_node;
 	size_t parent_node_id;
 };
+
 void OPCUASERVER_API set_endpoint(const char* endpoint);
 
 void OPCUASERVER_API set_server_uri(const char* uri);
@@ -103,3 +104,5 @@ void OPCUASERVER_API alloc_variables(size_t count);
 void OPCUASERVER_API get_variable_value(OPCUA_Variable* variable);
 
 void OPCUASERVER_API get_variables_value(OPCUA_Variable* variables, size_t count);
+
+void OPCUASERVER_API set_variable_value(OPCUA_Variable* variable);
