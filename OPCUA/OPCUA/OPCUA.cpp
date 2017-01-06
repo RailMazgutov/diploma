@@ -410,3 +410,91 @@ void set_variables_value_int64(OPCUA_Variable* variables, size_t count)
 	for (int i = 0; i < count; i++)
 		set_variable_value_int64(&variables[i]);
 }
+
+void get_variable_value_local_text(OPCUA_Variable* variable)
+{
+	variable->value.local_text_val = variables[variable->id].GetValue().As<LocalText>();
+}
+
+void get_variables_value_local_text(OPCUA_Variable* variables, size_t count)
+{
+	for (int i = 0; i < count; i++)
+		get_variable_value_local_text(&variables[i]);
+}
+
+void set_variable_value_local_text(OPCUA_Variable* variable)
+{
+	variables[variable->id].SetValue(variable->value.local_text_val);
+}
+
+void set_variables_value_local_text(OPCUA_Variable* variables, size_t count)
+{
+	for (int i = 0; i < count; i++)
+		set_variable_value_local_text(&variables[i]);
+}
+
+void get_variable_value_sbyte(OPCUA_Variable* variable)
+{
+	variable->value.sbyte_val = variables[variable->id].GetValue().As<sByte>();
+}
+
+void get_variables_value_sbyte(OPCUA_Variable* variables, size_t count)
+{
+	for (int i = 0; i < count; i++)
+		get_variable_value_sbyte(&variables[i]);
+}
+
+void set_variable_value_sbyte(OPCUA_Variable* variable)
+{
+	variables[variable->id].SetValue(variable->value.sbyte_val);
+}
+
+void set_variables_value_sbyte(OPCUA_Variable* variables, size_t count)
+{
+	for (int i = 0; i < count; i++)
+		set_variable_value_sbyte(&variables[i]);
+}
+
+void get_variable_value_uint16(OPCUA_Variable* variable)
+{
+	variable->value.uint16_val = variables[variable->id].GetValue().As<UInt16>();
+}
+
+void get_variables_value_uint16(OPCUA_Variable* variables, size_t count)
+{
+	for (int i = 0; i < count; i++)
+		get_variable_value_uint16(&variables[i]);
+}
+
+void set_variable_value_uint16(OPCUA_Variable* variable)
+{
+	variables[variable->id].SetValue(variable->value.uint16_val);
+}
+
+void set_variables_value_uint16(OPCUA_Variable* variables, size_t count)
+{
+	for (int i = 0; i < count; i++)
+		set_variable_value_uint16(&variables[i]);
+}
+
+void get_variable_value_uint32(OPCUA_Variable* variable)
+{
+	variable->value.uint32_val = variables[variable->id].GetValue().As<UInt32>();
+}
+
+void get_variables_value_uint32(OPCUA_Variable* variables, size_t count)
+{
+	for (int i = 0; i < count; i++)
+		get_variable_value_uint32(&variables[i]);
+}
+
+void set_variable_value_uint32(OPCUA_Variable* variable)
+{
+	variables[variable->id].SetValue(variable->value.uint32_val);
+}
+
+void set_variables_value_uint32(OPCUA_Variable* variables, size_t count)
+{
+	for (int i = 0; i < count; i++)
+		set_variable_value_uint32(&variables[i]);
+}
