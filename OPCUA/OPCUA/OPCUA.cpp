@@ -250,3 +250,9 @@ void set_variable_value(OPCUA_Variable* variable)
 	}
 	}
 }
+
+void set_variables_value(OPCUA_Variable* variables, size_t count)
+{
+	for (int i = 0; i < count; i++)
+		set_variable_value(&variables[i]);
+}
