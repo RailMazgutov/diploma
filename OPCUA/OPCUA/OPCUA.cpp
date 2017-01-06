@@ -256,3 +256,25 @@ void set_variables_value(OPCUA_Variable* variables, size_t count)
 	for (int i = 0; i < count; i++)
 		set_variable_value(&variables[i]);
 }
+
+void get_variable_value_boolean(OPCUA_Variable* variable)
+{
+	variable->value.bool_val = variables[variable->id].GetValue().As<Boolean>();
+}
+
+void get_variables_value_boolean(OPCUA_Variable* variables, size_t count)
+{
+	for (int i = 0; i < count; i++)
+		get_variable_value_boolean(&variables[i]);
+}
+
+void set_variable_value_boolean(OPCUA_Variable* variable)
+{
+	variables[variable->id].SetValue(variable->value.bool_val);
+}
+
+void set_variables_value_boolean(OPCUA_Variable* variables, size_t count)
+{
+	for (int i = 0; i < count; i++)
+		set_variable_value_boolean(&variables[i]);
+}
