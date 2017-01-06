@@ -113,3 +113,53 @@ void OPCUASERVER_API get_variable_value_boolean(OPCUA_Variable* variable);
 void OPCUASERVER_API get_variables_value_boolean(OPCUA_Variable* variables, size_t count);
 void OPCUASERVER_API set_variable_value_boolean(OPCUA_Variable* variable);
 void OPCUASERVER_API set_variables_value_boolean(OPCUA_Variable* variables, size_t count);
+
+void OPCUASERVER_API get_variable_value_byte(OPCUA_Variable* variable);
+void OPCUASERVER_API get_variables_value_byte(OPCUA_Variable* variables, size_t count);
+void OPCUASERVER_API set_variable_value_byte(OPCUA_Variable* variable);
+void OPCUASERVER_API set_variables_value_byte(OPCUA_Variable* variables, size_t count);
+
+void OPCUASERVER_API get_variable_value_double(OPCUA_Variable* variable);
+void OPCUASERVER_API get_variables_value_double(OPCUA_Variable* variables, size_t count);
+void OPCUASERVER_API set_variable_value_double(OPCUA_Variable* variable);
+void OPCUASERVER_API set_variables_value_double(OPCUA_Variable* variables, size_t count);
+
+void OPCUASERVER_API get_variable_value_float(OPCUA_Variable* variable);
+void OPCUASERVER_API get_variables_value_float(OPCUA_Variable* variables, size_t count);
+void OPCUASERVER_API set_variable_value_float(OPCUA_Variable* variable);
+void OPCUASERVER_API set_variables_value_float(OPCUA_Variable* variables, size_t count);
+
+void OPCUASERVER_API get_variable_value_int16(OPCUA_Variable* variable);
+void OPCUASERVER_API get_variables_value_int16(OPCUA_Variable* variables, size_t count);
+void OPCUASERVER_API set_variable_value_int16(OPCUA_Variable* variable);
+void OPCUASERVER_API set_variables_value_int16(OPCUA_Variable* variables, size_t count);
+
+void OPCUASERVER_API get_variable_value_int32(OPCUA_Variable* variable);
+void OPCUASERVER_API get_variables_value_int32(OPCUA_Variable* variables, size_t count);
+void OPCUASERVER_API set_variable_value_int32(OPCUA_Variable* variable);
+void OPCUASERVER_API set_variables_value_int32(OPCUA_Variable* variables, size_t count);
+
+void OPCUASERVER_API get_variable_value_int64(OPCUA_Variable* variable);
+void OPCUASERVER_API get_variables_value_int64(OPCUA_Variable* variables, size_t count);
+void OPCUASERVER_API set_variable_value_int64(OPCUA_Variable* variable);
+void OPCUASERVER_API set_variables_value_int64(OPCUA_Variable* variables, size_t count);
+
+void OPCUASERVER_API get_variable_value_local_text(OPCUA_Variable* variable);
+void OPCUASERVER_API get_variables_value_local_text(OPCUA_Variable* variables, size_t count);
+void OPCUASERVER_API set_variable_value_local_text(OPCUA_Variable* variable);
+void OPCUASERVER_API set_variables_value_local_text(OPCUA_Variable* variables, size_t count);
+
+void OPCUASERVER_API get_variable_value_sbyte(OPCUA_Variable* variable);
+void OPCUASERVER_API get_variables_value_sbyte(OPCUA_Variable* variables, size_t count);
+void OPCUASERVER_API set_variable_value_sbyte(OPCUA_Variable* variable);
+void OPCUASERVER_API set_variables_value_sbyte(OPCUA_Variable* variables, size_t count);
+
+void OPCUASERVER_API get_variable_value_uint16(OPCUA_Variable* variable);
+void OPCUASERVER_API get_variables_value_uint16(OPCUA_Variable* variables, size_t count);
+void OPCUASERVER_API set_variable_value_uint16(OPCUA_Variable* variable);
+void OPCUASERVER_API set_variables_value_uint16(OPCUA_Variable* variables, size_t count);
+
+void OPCUASERVER_API get_variable_value_uint32(OPCUA_Variable* variable);
+void OPCUASERVER_API get_variables_value_uint32(OPCUA_Variable* variables, size_t count);
+void OPCUASERVER_API set_variable_value_uint32(OPCUA_Variable* variable);
+void OPCUASERVER_API set_variables_value_uint32(OPCUA_Variable* variables, size_t count);
