@@ -5,6 +5,12 @@
 #include "server.h"
 #include <chrono>
 #include <thread>
+#include <iostream>
+
+void callback_fcn(const OPCUA_Variable* variable)
+{
+	std::cout << "WORKS!!!" << std::endl;
+}
 
 int main()
 {
@@ -16,6 +22,7 @@ int main()
 
 	// Надо задать большим в Properties -> Linker -> System -> Stack Reserve Size
 	start_server();
+	subscribe_datachange(callback_fcn);
 	alloc_nodes(30);
 	namespaces[0] = create_namespace("VVER1000_1");
 	namespaces[1] = create_namespace("VVER1000_1");
@@ -31,9 +38,10 @@ int main()
 	OPCUA_Variable variable;
 	variable.namespace_id = namespaces[0];
 	variable.parent_id = nodes_core_1[0];
-	variable.name= "TEST";
-	variable.type = OPCUA_INT32;
-	add_variable(&variable);
+	//variable.name= "TEST";
+	variable.data.type = OPCUA_INT32;
+	variable.data.value.int32_val = 0;
+	add_variable(&variable, "TEST");
 	
 	main_parameters.namespace_id = namespaces[1];
 	nodes_core_2[0] = add_node(main_parameters, "INFO");
@@ -41,21 +49,21 @@ int main()
 	OPCUA_Variable variable2;
 	variable2.namespace_id = namespaces[1];
 	variable2.parent_id = nodes_core_2[0];
-	variable2.name = "TEST";
-	variable2.type = OPCUA_INT32;
-	add_variable(&variable2);
+	variable2.data.type = OPCUA_INT32;
+	variable2.data.value.int32_val = 0;
+	add_variable(&variable2, "TEST");
 
 	
-	int val = 0;
-	variable.value.int32_val = val;
-	variable2.value.int32_val = val;
+	int val = 1;
+	variable.data.value.int32_val = val;
+	variable2.data.value.int32_val = val;
 	while(true)
 	{		
 		set_variable_value_int32(&variable);
 		
-		variable.value.int32_val = val;
+		variable.data.value.int32_val = val;
 		if (val % 2 == 0) {
-			variable2.value.int32_val = val / 2;
+			variable2.data.value.int32_val = val / 2;
 			set_variable_value_int32(&variable2);
 		}
 		++val;

@@ -11,9 +11,8 @@ using namespace OpcUa;
 
 std::vector<Node> nodes;
 std::vector<Node> variables;
-std::map<OPCUA_Variable, Node> receive_map;
-std::map<Node, OPCUA_Variable> export_map;
-std::map<uint32_t, size_t> handle_to_var;
+std::vector<OPCUA_Variable> export_variables;
+std::map<uint32_t, OPCUA_Variable> handle_to_var;
 std::map<uint32_t, std::function<void(const OPCUA_Variable*)>> handle_to_callback;
 
 std::function<void(const OPCUA_Variable*)> callback_function;
@@ -26,9 +25,60 @@ class SubClient : public SubscriptionHandler
 {
 	void DataChange(uint32_t handle, const Node& node, const Variant& val, AttributeId attr) override
 	{
-		//Node variable = variables[handle_to_var[handle]];
-		OPCUA_Variable* exp_variable = &(export_map[node]);
-		callback_function(exp_variable);
+		OPCUA_Variable* variable = &handle_to_var[handle];
+		
+		DataValue data = node.GetDataValue();
+		variable->data.timestamp = data.SourceTimestamp.Value;
+		variable->data.picoseconds = data.SourcePicoseconds;
+		variable->data.status = opcua_status(data.Status);
+		switch (variable->data.type)
+		{
+		case(OPCUA_BOOLEAN): {
+			variable->data.value.bool_val = node.GetValue().As<Boolean>();
+			break;
+		}
+		case(OPCUA_BYTE): {
+			variable->data.value.byte_val = node.GetValue().As<Byte>();
+			break;
+		}
+		case(OPCUA_DOUBLE): {
+			variable->data.value.double_val = node.GetValue().As<Double>();
+			break;
+		}
+		case(OPCUA_FLOAT): {
+			variable->data.value.float_val = node.GetValue().As<Float>();
+			break;
+		}
+		case(OPCUA_INT16): {
+			variable->data.value.int16_val = node.GetValue().As<Int16>();
+			break;
+		}
+		case(OPCUA_INT32): {
+			variable->data.value.int32_val = node.GetValue().As<Int32>();
+			break;
+		}
+		case(OPCUA_INT64): {
+			variable->data.value.int64_val = node.GetValue().As<Int64>();
+			break;
+		}
+		case(OPCUA_LOCAL_TEXT): {
+			variable->data.value.local_text_val = node.GetValue().As<LocalText>();
+			break;
+		}
+		case(OPCUA_S_BYTE): {
+			variable->data.value.sbyte_val = node.GetValue().As<sByte>();
+			break;
+		}
+		case(OPCUA_UNIT16): {
+			variable->data.value.uint16_val = node.GetValue().As<UInt16>();
+			break;
+		}
+		case(OPCUA_UINT32): {
+			variable->data.value.uint32_val = node.GetValue().As<UInt32>();
+			break;
+		}
+		}
+		callback_function(variable);
 		/*std::cout << "Received DataChange event, value of Node " << node << " is now: " << val.ToString() << std::endl;
 		std::cout << "handle " << handle << std::endl;*/
 	}
@@ -124,8 +174,6 @@ size_t add_variable(OPCUA_Variable* variable, char* name)
 	case(OPCUA_INT32): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.int32_val));
-		auto q = sub->SubscribeDataChange(variables[variable->id]);
-		std::cout << q << std::endl;
 		break;
 	}
 	case(OPCUA_INT64): {
@@ -155,6 +203,8 @@ size_t add_variable(OPCUA_Variable* variable, char* name)
 	}
 	default: break;
 	}
+	auto handle = sub->SubscribeDataChange(variables[variable->id]);
+	handle_to_var.insert(std::pair<uint32_t, OPCUA_Variable>(handle, *variable));
 	return variable->id;
 }
 
@@ -217,53 +267,58 @@ void get_variables_value(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value(OPCUA_Variable* variable)
 {
+	DataValue value;
+	value.Status = StatusCode(variable->data.status);
+	value.SourceTimestamp = DateTime(variable->data.timestamp);
+	value.SourcePicoseconds = variable->data.picoseconds;
 	switch (variable->data.type)
 	{
 	case(OPCUA_BOOLEAN): {
-		variables[variable->id].SetValue(variable->data.value.bool_val);
+		value.Value = variable->data.value.bool_val;		
 		break;
 	}
 	case(OPCUA_BYTE): {
-		variables[variable->id].SetValue(variable->data.value.byte_val);
+		value.Value = variable->data.value.byte_val;
 		break;
 	}
 	case(OPCUA_DOUBLE): {
-		variables[variable->id].SetValue(variable->data.value.double_val);
+		value.Value = variable->data.value.double_val;
 		break;
 	}
 	case(OPCUA_FLOAT): {
-		variables[variable->id].SetValue(variable->data.value.float_val);
+		value.Value = variable->data.value.float_val;
 		break;
 	}
 	case(OPCUA_INT16): {
-		variables[variable->id].SetValue(variable->data.value.int16_val);
+		value.Value = variable->data.value.int16_val;
 		break;
 	}
 	case(OPCUA_INT32): {
-		variables[variable->id].SetValue(variable->data.value.int32_val);
+		value.Value = variable->data.value.int32_val;
 		break;
 	}
 	case(OPCUA_INT64): {
-		variables[variable->id].SetValue(variable->data.value.int64_val);
+		value.Value = variable->data.value.int64_val;
 		break;
 	}
 	case(OPCUA_LOCAL_TEXT): {
-		variables[variable->id].SetValue(variable->data.value.local_text_val);
+		value.Value = variable->data.value.local_text_val;
 		break;
 	}
 	case(OPCUA_S_BYTE): {
-		variables[variable->id].SetValue(variable->data.value.sbyte_val);
+		value.Value = variable->data.value.sbyte_val;
 		break;
 	}
 	case(OPCUA_UNIT16): {
-		variables[variable->id].SetValue(variable->data.value.uint16_val);
+		value.Value = variable->data.value.uint16_val;
 		break;
 	}
 	case(OPCUA_UINT32): {
-		variables[variable->id].SetValue(variable->data.value.uint32_val);
+		value.Value = variable->data.value.uint32_val;
 		break;
 	}
 	}
+	variables[variable->id].SetValue(value);
 }
 
 void set_variables_value(OPCUA_Variable* variables, size_t count)

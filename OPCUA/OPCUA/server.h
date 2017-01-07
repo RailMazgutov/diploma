@@ -12,7 +12,7 @@ typedef double Double;
 typedef float Float;
 typedef short Int16;
 typedef int Int32;
-typedef long int Int64;
+typedef long long Int64;
 typedef char* LocalText;
 typedef char sByte;
 typedef unsigned short UInt16;
@@ -275,8 +275,8 @@ struct OPCUA_DataValue
 	opcua_data_type			type;
 	opcua_value				value;
 	opcua_status			status;
-	int64_t					timestamp;
-	uint16_t				picoseconds;
+	Int64					timestamp;
+	UInt16				picoseconds;
 };
 struct OPCUA_Variable
 {
@@ -379,4 +379,4 @@ void OPCUASERVER_API get_variables_value_uint32(OPCUA_Variable* variables, size_
 void OPCUASERVER_API set_variable_value_uint32(OPCUA_Variable* variable);
 void OPCUASERVER_API set_variables_value_uint32(OPCUA_Variable* variables, size_t count);
 
-void OPCUASERVER_API subscribe_datachange(void (*callback)(OPCUA_Variable));
+void OPCUASERVER_API subscribe_datachange(void (*callback)(const OPCUA_Variable*));
