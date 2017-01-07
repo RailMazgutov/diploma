@@ -51,14 +51,14 @@ void set_server_uri(const char* uri)
 }
 
 unsigned int create_namespace(char* name)
-{	
+{
 	return server.RegisterNamespace(name);
 }
 
 void start_server()
 {
 	server.Start();
-	
+
 	sub = server.CreateSubscription(100, sclt);
 	objects = server.GetObjectsNode();
 }
@@ -93,64 +93,64 @@ void alloc_variables(size_t count)
 size_t add_variable(OPCUA_Variable* variable, char* name)
 {
 	Node parent = nodes[variable->parent_id];
-	
-	switch (variable->type)
+
+	switch (variable->data.type)
 	{
 	case(OPCUA_BOOLEAN): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.bool_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.bool_val));
 		break;
 	}
 	case(OPCUA_BYTE): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.byte_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.byte_val));
 		break;
 	}
 	case(OPCUA_DOUBLE): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.double_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.double_val));
 		break;
 	}
 	case(OPCUA_FLOAT): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.float_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.float_val));
 		break;
 	}
 	case(OPCUA_INT16): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.int16_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.int16_val));
 		break;
 	}
 	case(OPCUA_INT32): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.int32_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.int32_val));
 		auto q = sub->SubscribeDataChange(variables[variable->id]);
 		std::cout << q << std::endl;
 		break;
 	}
 	case(OPCUA_INT64): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.int64_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.int64_val));
 		break;
 	}
 	case(OPCUA_LOCAL_TEXT): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.local_text_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.local_text_val));
 		break;
 	}
 	case(OPCUA_S_BYTE): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.sbyte_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.sbyte_val));
 		break;
 	}
 	case(OPCUA_UNIT16): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.uint16_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.uint16_val));
 		break;
 	}
 	case(OPCUA_UINT32): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.uint32_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.uint32_val));
 		break;
 	}
 	default: break;
@@ -160,50 +160,50 @@ size_t add_variable(OPCUA_Variable* variable, char* name)
 
 void get_variable_value(OPCUA_Variable* variable)
 {
-	switch (variable->type)
+	switch (variable->data.type)
 	{
 	case(OPCUA_BOOLEAN): {
-		variable->value.bool_val = variables[variable->id].GetValue().As<Boolean>();
+		variable->data.value.bool_val = variables[variable->id].GetValue().As<Boolean>();
 		break;
 	}
 	case(OPCUA_BYTE): {
-		variable->value.byte_val = variables[variable->id].GetValue().As<Byte>();
+		variable->data.value.byte_val = variables[variable->id].GetValue().As<Byte>();
 		break;
 	}
 	case(OPCUA_DOUBLE): {
-		variable->value.double_val = variables[variable->id].GetValue().As<Double>();
+		variable->data.value.double_val = variables[variable->id].GetValue().As<Double>();
 		break;
 	}
 	case(OPCUA_FLOAT): {
-		variable->value.float_val = variables[variable->id].GetValue().As<Float>();
+		variable->data.value.float_val = variables[variable->id].GetValue().As<Float>();
 		break;
 	}
 	case(OPCUA_INT16): {
-		variable->value.int16_val = variables[variable->id].GetValue().As<Int16>();
+		variable->data.value.int16_val = variables[variable->id].GetValue().As<Int16>();
 		break;
 	}
 	case(OPCUA_INT32): {
-		variable->value.int32_val = variables[variable->id].GetValue().As<Int32>();
+		variable->data.value.int32_val = variables[variable->id].GetValue().As<Int32>();
 		break;
 	}
 	case(OPCUA_INT64): {
-		variable->value.int64_val = variables[variable->id].GetValue().As<Int64>();
+		variable->data.value.int64_val = variables[variable->id].GetValue().As<Int64>();
 		break;
 	}
 	case(OPCUA_LOCAL_TEXT): {
-		variable->value.local_text_val = variables[variable->id].GetValue().As<LocalText>();
+		variable->data.value.local_text_val = variables[variable->id].GetValue().As<LocalText>();
 		break;
 	}
 	case(OPCUA_S_BYTE): {
-		variable->value.sbyte_val = variables[variable->id].GetValue().As<sByte>();
+		variable->data.value.sbyte_val = variables[variable->id].GetValue().As<sByte>();
 		break;
 	}
 	case(OPCUA_UNIT16): {
-		variable->value.uint16_val = variables[variable->id].GetValue().As<UInt16>();
+		variable->data.value.uint16_val = variables[variable->id].GetValue().As<UInt16>();
 		break;
 	}
 	case(OPCUA_UINT32): {
-		variable->value.uint32_val = variables[variable->id].GetValue().As<UInt32>();
+		variable->data.value.uint32_val = variables[variable->id].GetValue().As<UInt32>();
 		break;
 	}
 	}
@@ -217,50 +217,50 @@ void get_variables_value(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value(OPCUA_Variable* variable)
 {
-	switch (variable->type)
+	switch (variable->data.type)
 	{
 	case(OPCUA_BOOLEAN): {
-		variables[variable->id].SetValue(variable->value.bool_val);
+		variables[variable->id].SetValue(variable->data.value.bool_val);
 		break;
 	}
 	case(OPCUA_BYTE): {
-		variables[variable->id].SetValue(variable->value.byte_val);
+		variables[variable->id].SetValue(variable->data.value.byte_val);
 		break;
 	}
 	case(OPCUA_DOUBLE): {
-		variables[variable->id].SetValue(variable->value.double_val);
+		variables[variable->id].SetValue(variable->data.value.double_val);
 		break;
 	}
 	case(OPCUA_FLOAT): {
-		variables[variable->id].SetValue(variable->value.float_val);
+		variables[variable->id].SetValue(variable->data.value.float_val);
 		break;
 	}
 	case(OPCUA_INT16): {
-		variables[variable->id].SetValue(variable->value.int16_val);
+		variables[variable->id].SetValue(variable->data.value.int16_val);
 		break;
 	}
 	case(OPCUA_INT32): {
-		variables[variable->id].SetValue(variable->value.int32_val);
+		variables[variable->id].SetValue(variable->data.value.int32_val);
 		break;
 	}
 	case(OPCUA_INT64): {
-		variables[variable->id].SetValue(variable->value.int64_val);
+		variables[variable->id].SetValue(variable->data.value.int64_val);
 		break;
 	}
 	case(OPCUA_LOCAL_TEXT): {
-		variables[variable->id].SetValue(variable->value.local_text_val);
+		variables[variable->id].SetValue(variable->data.value.local_text_val);
 		break;
 	}
 	case(OPCUA_S_BYTE): {
-		variables[variable->id].SetValue(variable->value.sbyte_val);
+		variables[variable->id].SetValue(variable->data.value.sbyte_val);
 		break;
 	}
 	case(OPCUA_UNIT16): {
-		variables[variable->id].SetValue(variable->value.uint16_val);
+		variables[variable->id].SetValue(variable->data.value.uint16_val);
 		break;
 	}
 	case(OPCUA_UINT32): {
-		variables[variable->id].SetValue(variable->value.uint32_val);
+		variables[variable->id].SetValue(variable->data.value.uint32_val);
 		break;
 	}
 	}
@@ -274,7 +274,7 @@ void set_variables_value(OPCUA_Variable* variables, size_t count)
 
 void get_variable_value_boolean(OPCUA_Variable* variable)
 {
-	variable->value.bool_val = variables[variable->id].GetValue().As<Boolean>();
+	variable->data.value.bool_val = variables[variable->id].GetValue().As<Boolean>();
 }
 
 void get_variables_value_boolean(OPCUA_Variable* variables, size_t count)
@@ -285,7 +285,7 @@ void get_variables_value_boolean(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_boolean(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->value.bool_val);
+	variables[variable->id].SetValue(variable->data.value.bool_val);
 }
 
 void set_variables_value_boolean(OPCUA_Variable* variables, size_t count)
@@ -296,7 +296,7 @@ void set_variables_value_boolean(OPCUA_Variable* variables, size_t count)
 
 void get_variable_value_byte(OPCUA_Variable* variable)
 {
-	variable->value.byte_val = variables[variable->id].GetValue().As<Byte>();
+	variable->data.value.byte_val = variables[variable->id].GetValue().As<Byte>();
 }
 
 void get_variables_value_byte(OPCUA_Variable* variables, size_t count)
@@ -307,7 +307,7 @@ void get_variables_value_byte(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_byte(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->value.byte_val);
+	variables[variable->id].SetValue(variable->data.value.byte_val);
 }
 
 void set_variables_value_byte(OPCUA_Variable* variables, size_t count)
@@ -318,7 +318,7 @@ void set_variables_value_byte(OPCUA_Variable* variables, size_t count)
 
 void get_variable_value_double(OPCUA_Variable* variable)
 {
-	variable->value.double_val = variables[variable->id].GetValue().As<Double>();
+	variable->data.value.double_val = variables[variable->id].GetValue().As<Double>();
 }
 
 void get_variables_value_double(OPCUA_Variable* variables, size_t count)
@@ -329,7 +329,7 @@ void get_variables_value_double(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_double(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->value.double_val);
+	variables[variable->id].SetValue(variable->data.value.double_val);
 }
 
 void set_variables_value_double(OPCUA_Variable* variables, size_t count)
@@ -340,7 +340,7 @@ void set_variables_value_double(OPCUA_Variable* variables, size_t count)
 
 void get_variable_value_float(OPCUA_Variable* variable)
 {
-	variable->value.float_val = variables[variable->id].GetValue().As<Float>();
+	variable->data.value.float_val = variables[variable->id].GetValue().As<Float>();
 }
 
 void get_variables_value_float(OPCUA_Variable* variables, size_t count)
@@ -351,7 +351,7 @@ void get_variables_value_float(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_float(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->value.float_val);
+	variables[variable->id].SetValue(variable->data.value.float_val);
 }
 
 void set_variables_value_float(OPCUA_Variable* variables, size_t count)
@@ -362,7 +362,7 @@ void set_variables_value_float(OPCUA_Variable* variables, size_t count)
 
 void get_variable_value_int16(OPCUA_Variable* variable)
 {
-	variable->value.int16_val = variables[variable->id].GetValue().As<Int16>();
+	variable->data.value.int16_val = variables[variable->id].GetValue().As<Int16>();
 }
 
 void get_variables_value_int16(OPCUA_Variable* variables, size_t count)
@@ -373,7 +373,7 @@ void get_variables_value_int16(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_int16(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->value.int16_val);
+	variables[variable->id].SetValue(variable->data.value.int16_val);
 }
 
 void set_variables_value_int16(OPCUA_Variable* variables, size_t count)
@@ -384,7 +384,7 @@ void set_variables_value_int16(OPCUA_Variable* variables, size_t count)
 
 void get_variable_value_int32(OPCUA_Variable* variable)
 {
-	variable->value.int32_val = variables[variable->id].GetValue().As<Int32>();
+	variable->data.value.int32_val = variables[variable->id].GetValue().As<Int32>();
 }
 
 void get_variables_value_int32(OPCUA_Variable* variables, size_t count)
@@ -395,7 +395,7 @@ void get_variables_value_int32(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_int32(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->value.int32_val);
+	variables[variable->id].SetValue(variable->data.value.int32_val);
 }
 
 void set_variables_value_int32(OPCUA_Variable* variables, size_t count)
@@ -406,7 +406,7 @@ void set_variables_value_int32(OPCUA_Variable* variables, size_t count)
 
 void get_variable_value_int64(OPCUA_Variable* variable)
 {
-	variable->value.int64_val = variables[variable->id].GetValue().As<Int64>();
+	variable->data.value.int64_val = variables[variable->id].GetValue().As<Int64>();
 }
 
 void get_variables_value_int64(OPCUA_Variable* variables, size_t count)
@@ -417,7 +417,7 @@ void get_variables_value_int64(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_int64(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->value.int64_val);
+	variables[variable->id].SetValue(variable->data.value.int64_val);
 }
 
 void set_variables_value_int64(OPCUA_Variable* variables, size_t count)
@@ -428,7 +428,7 @@ void set_variables_value_int64(OPCUA_Variable* variables, size_t count)
 
 void get_variable_value_local_text(OPCUA_Variable* variable)
 {
-	variable->value.local_text_val = variables[variable->id].GetValue().As<LocalText>();
+	variable->data.value.local_text_val = variables[variable->id].GetValue().As<LocalText>();
 }
 
 void get_variables_value_local_text(OPCUA_Variable* variables, size_t count)
@@ -439,7 +439,7 @@ void get_variables_value_local_text(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_local_text(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->value.local_text_val);
+	variables[variable->id].SetValue(variable->data.value.local_text_val);
 }
 
 void set_variables_value_local_text(OPCUA_Variable* variables, size_t count)
@@ -450,7 +450,7 @@ void set_variables_value_local_text(OPCUA_Variable* variables, size_t count)
 
 void get_variable_value_sbyte(OPCUA_Variable* variable)
 {
-	variable->value.sbyte_val = variables[variable->id].GetValue().As<sByte>();
+	variable->data.value.sbyte_val = variables[variable->id].GetValue().As<sByte>();
 }
 
 void get_variables_value_sbyte(OPCUA_Variable* variables, size_t count)
@@ -461,7 +461,7 @@ void get_variables_value_sbyte(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_sbyte(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->value.sbyte_val);
+	variables[variable->id].SetValue(variable->data.value.sbyte_val);
 }
 
 void set_variables_value_sbyte(OPCUA_Variable* variables, size_t count)
@@ -472,7 +472,7 @@ void set_variables_value_sbyte(OPCUA_Variable* variables, size_t count)
 
 void get_variable_value_uint16(OPCUA_Variable* variable)
 {
-	variable->value.uint16_val = variables[variable->id].GetValue().As<UInt16>();
+	variable->data.value.uint16_val = variables[variable->id].GetValue().As<UInt16>();
 }
 
 void get_variables_value_uint16(OPCUA_Variable* variables, size_t count)
@@ -483,7 +483,7 @@ void get_variables_value_uint16(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_uint16(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->value.uint16_val);
+	variables[variable->id].SetValue(variable->data.value.uint16_val);
 }
 
 void set_variables_value_uint16(OPCUA_Variable* variables, size_t count)
@@ -494,7 +494,7 @@ void set_variables_value_uint16(OPCUA_Variable* variables, size_t count)
 
 void get_variable_value_uint32(OPCUA_Variable* variable)
 {
-	variable->value.uint32_val = variables[variable->id].GetValue().As<UInt32>();
+	variable->data.value.uint32_val = variables[variable->id].GetValue().As<UInt32>();
 }
 
 void get_variables_value_uint32(OPCUA_Variable* variables, size_t count)
@@ -505,7 +505,7 @@ void get_variables_value_uint32(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_uint32(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->value.uint32_val);
+	variables[variable->id].SetValue(variable->data.value.uint32_val);
 }
 
 void set_variables_value_uint32(OPCUA_Variable* variables, size_t count)
@@ -514,7 +514,7 @@ void set_variables_value_uint32(OPCUA_Variable* variables, size_t count)
 		set_variable_value_uint32(&variables[i]);
 }
 
-void subscribe_datachange(OPCUA_Variable* variable, void(*callback)(OPCUA_Variable))
+void subscribe_datachange(void(*callback)(const OPCUA_Variable*))
 {
-	
+	callback_function = callback;
 }
