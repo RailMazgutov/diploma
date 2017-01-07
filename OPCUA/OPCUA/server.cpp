@@ -340,7 +340,12 @@ void get_variables_value_boolean(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_boolean(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->data.value.bool_val);
+	DataValue value;
+	value.Status = StatusCode(variable->data.status);
+	value.SourceTimestamp = DateTime(variable->data.timestamp);
+	value.SourcePicoseconds = variable->data.picoseconds;
+	value.Value = variable->data.value.bool_val;
+	variables[variable->id].SetValue(value);
 }
 
 void set_variables_value_boolean(OPCUA_Variable* variables, size_t count)
@@ -362,7 +367,12 @@ void get_variables_value_byte(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_byte(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->data.value.byte_val);
+	DataValue value;
+	value.Status = StatusCode(variable->data.status);
+	value.SourceTimestamp = DateTime(variable->data.timestamp);
+	value.SourcePicoseconds = variable->data.picoseconds;
+	value.Value = variable->data.value.byte_val;
+	variables[variable->id].SetValue(value);
 }
 
 void set_variables_value_byte(OPCUA_Variable* variables, size_t count)
@@ -373,6 +383,7 @@ void set_variables_value_byte(OPCUA_Variable* variables, size_t count)
 
 void get_variable_value_double(OPCUA_Variable* variable)
 {
+	
 	variable->data.value.double_val = variables[variable->id].GetValue().As<Double>();
 }
 
@@ -384,7 +395,12 @@ void get_variables_value_double(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_double(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->data.value.double_val);
+	DataValue value;
+	value.Status = StatusCode(variable->data.status);
+	value.SourceTimestamp = DateTime(variable->data.timestamp);
+	value.SourcePicoseconds = variable->data.picoseconds;
+	value.Value = variable->data.value.double_val;
+	variables[variable->id].SetValue(value);
 }
 
 void set_variables_value_double(OPCUA_Variable* variables, size_t count)
@@ -406,7 +422,12 @@ void get_variables_value_float(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_float(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->data.value.float_val);
+	DataValue value;
+	value.Status = StatusCode(variable->data.status);
+	value.SourceTimestamp = DateTime(variable->data.timestamp);
+	value.SourcePicoseconds = variable->data.picoseconds;
+	value.Value = variable->data.value.float_val;
+	variables[variable->id].SetValue(value);
 }
 
 void set_variables_value_float(OPCUA_Variable* variables, size_t count)
@@ -428,7 +449,12 @@ void get_variables_value_int16(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_int16(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->data.value.int16_val);
+	DataValue value;
+	value.Status = StatusCode(variable->data.status);
+	value.SourceTimestamp = DateTime(variable->data.timestamp);
+	value.SourcePicoseconds = variable->data.picoseconds;
+	value.Value = variable->data.value.int16_val;
+	variables[variable->id].SetValue(value);
 }
 
 void set_variables_value_int16(OPCUA_Variable* variables, size_t count)
@@ -450,7 +476,12 @@ void get_variables_value_int32(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_int32(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->data.value.int32_val);
+	DataValue value;
+	value.Status = StatusCode(variable->data.status);
+	value.SourceTimestamp = DateTime(variable->data.timestamp);
+	value.SourcePicoseconds = variable->data.picoseconds;
+	value.Value = variable->data.value.int32_val;
+	variables[variable->id].SetValue(value);
 }
 
 void set_variables_value_int32(OPCUA_Variable* variables, size_t count)
@@ -472,7 +503,12 @@ void get_variables_value_int64(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_int64(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->data.value.int64_val);
+	DataValue value;
+	value.Status = StatusCode(variable->data.status);
+	value.SourceTimestamp = DateTime(variable->data.timestamp);
+	value.SourcePicoseconds = variable->data.picoseconds;
+	value.Value = variable->data.value.int64_val;
+	variables[variable->id].SetValue(value);
 }
 
 void set_variables_value_int64(OPCUA_Variable* variables, size_t count)
@@ -494,7 +530,12 @@ void get_variables_value_local_text(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_local_text(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->data.value.local_text_val);
+	DataValue value;
+	value.Status = StatusCode(variable->data.status);
+	value.SourceTimestamp = DateTime(variable->data.timestamp);
+	value.SourcePicoseconds = variable->data.picoseconds;
+	value.Value = variable->data.value.local_text_val;
+	variables[variable->id].SetValue(value);
 }
 
 void set_variables_value_local_text(OPCUA_Variable* variables, size_t count)
@@ -516,7 +557,12 @@ void get_variables_value_sbyte(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_sbyte(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->data.value.sbyte_val);
+	DataValue value;
+	value.Status = StatusCode(variable->data.status);
+	value.SourceTimestamp = DateTime(variable->data.timestamp);
+	value.SourcePicoseconds = variable->data.picoseconds;
+	value.Value = variable->data.value.sbyte_val;
+	variables[variable->id].SetValue(value);
 }
 
 void set_variables_value_sbyte(OPCUA_Variable* variables, size_t count)
@@ -538,7 +584,12 @@ void get_variables_value_uint16(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_uint16(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->data.value.uint16_val);
+	DataValue value;
+	value.Status = StatusCode(variable->data.status);
+	value.SourceTimestamp = DateTime(variable->data.timestamp);
+	value.SourcePicoseconds = variable->data.picoseconds;
+	value.Value = variable->data.value.uint16_val;
+	variables[variable->id].SetValue(value);
 }
 
 void set_variables_value_uint16(OPCUA_Variable* variables, size_t count)
@@ -560,7 +611,12 @@ void get_variables_value_uint32(OPCUA_Variable* variables, size_t count)
 
 void set_variable_value_uint32(OPCUA_Variable* variable)
 {
-	variables[variable->id].SetValue(variable->data.value.uint32_val);
+	DataValue value;
+	value.Status = StatusCode(variable->data.status);
+	value.SourceTimestamp = DateTime(variable->data.timestamp);
+	value.SourcePicoseconds = variable->data.picoseconds;
+	value.Value = variable->data.value.uint32_val;
+	variables[variable->id].SetValue(value);
 }
 
 void set_variables_value_uint32(OPCUA_Variable* variables, size_t count)
