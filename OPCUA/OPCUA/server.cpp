@@ -11,12 +11,29 @@ using namespace OpcUa;
 
 std::vector<Node> nodes;
 std::vector<Node> variables;
+std::map<OPCUA_Variable, Node> receive_map;
+std::map<Node, OPCUA_Variable> export_map;
+std::map<uint32_t, size_t> handle_to_var;
+std::map<uint32_t, std::function<void(const OPCUA_Variable*)>> handle_to_callback;
 
-
+std::function<void(const OPCUA_Variable*)> callback_function;
 
 Node objects;
 UaServer server(false);
+std::unique_ptr<Subscription> sub;
 
+class SubClient : public SubscriptionHandler
+{
+	void DataChange(uint32_t handle, const Node& node, const Variant& val, AttributeId attr) override
+	{
+		//Node variable = variables[handle_to_var[handle]];
+		OPCUA_Variable* exp_variable = &(export_map[node]);
+		callback_function(exp_variable);
+		/*std::cout << "Received DataChange event, value of Node " << node << " is now: " << val.ToString() << std::endl;
+		std::cout << "handle " << handle << std::endl;*/
+	}
+};
+SubClient sclt;
 
 Node* getNode(size_t id)
 {
@@ -41,6 +58,8 @@ unsigned int create_namespace(char* name)
 void start_server()
 {
 	server.Start();
+	
+	sub = server.CreateSubscription(100, sclt);
 	objects = server.GetObjectsNode();
 }
 
@@ -71,7 +90,7 @@ void alloc_variables(size_t count)
 	variables.reserve(count);
 }
 
-size_t add_variable(OPCUA_Variable* variable)
+size_t add_variable(OPCUA_Variable* variable, char* name)
 {
 	Node parent = nodes[variable->parent_id];
 	
@@ -79,68 +98,64 @@ size_t add_variable(OPCUA_Variable* variable)
 	{
 	case(OPCUA_BOOLEAN): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, variable->name, variable->value.bool_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.bool_val));
 		break;
 	}
 	case(OPCUA_BYTE): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, variable->name, variable->value.byte_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.byte_val));
 		break;
 	}
 	case(OPCUA_DOUBLE): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, variable->name, variable->value.double_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.double_val));
 		break;
 	}
 	case(OPCUA_FLOAT): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, variable->name, variable->value.float_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.float_val));
 		break;
 	}
 	case(OPCUA_INT16): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, variable->name, variable->value.int16_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.int16_val));
 		break;
 	}
 	case(OPCUA_INT32): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, variable->name, variable->value.int32_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.int32_val));
+		auto q = sub->SubscribeDataChange(variables[variable->id]);
+		std::cout << q << std::endl;
 		break;
 	}
 	case(OPCUA_INT64): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, variable->name, variable->value.int64_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.int64_val));
 		break;
 	}
 	case(OPCUA_LOCAL_TEXT): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, variable->name, variable->value.local_text_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.local_text_val));
 		break;
 	}
 	case(OPCUA_S_BYTE): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, variable->name, variable->value.sbyte_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.sbyte_val));
 		break;
 	}
 	case(OPCUA_UNIT16): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, variable->name, variable->value.uint16_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.uint16_val));
 		break;
 	}
 	case(OPCUA_UINT32): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, variable->name, variable->value.uint32_val));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->value.uint32_val));
 		break;
 	}
 	default: break;
 	}
 	return variable->id;
-}
-
-void add_variables(OPCUA_Variable* variables, size_t count)
-{
-	for (int i = 0; i < count; i++)
-		add_variable(&variables[i]);
 }
 
 void get_variable_value(OPCUA_Variable* variable)
@@ -196,7 +211,7 @@ void get_variable_value(OPCUA_Variable* variable)
 
 void get_variables_value(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		get_variable_value(&variables[i]);
 }
 
@@ -253,7 +268,7 @@ void set_variable_value(OPCUA_Variable* variable)
 
 void set_variables_value(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		set_variable_value(&variables[i]);
 }
 
@@ -264,7 +279,7 @@ void get_variable_value_boolean(OPCUA_Variable* variable)
 
 void get_variables_value_boolean(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		get_variable_value_boolean(&variables[i]);
 }
 
@@ -275,7 +290,7 @@ void set_variable_value_boolean(OPCUA_Variable* variable)
 
 void set_variables_value_boolean(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		set_variable_value_boolean(&variables[i]);
 }
 
@@ -286,7 +301,7 @@ void get_variable_value_byte(OPCUA_Variable* variable)
 
 void get_variables_value_byte(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		get_variable_value_byte(&variables[i]);
 }
 
@@ -297,7 +312,7 @@ void set_variable_value_byte(OPCUA_Variable* variable)
 
 void set_variables_value_byte(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		set_variable_value_byte(&variables[i]);
 }
 
@@ -308,7 +323,7 @@ void get_variable_value_double(OPCUA_Variable* variable)
 
 void get_variables_value_double(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		get_variable_value_double(&variables[i]);
 }
 
@@ -319,7 +334,7 @@ void set_variable_value_double(OPCUA_Variable* variable)
 
 void set_variables_value_double(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		set_variable_value_double(&variables[i]);
 }
 
@@ -330,7 +345,7 @@ void get_variable_value_float(OPCUA_Variable* variable)
 
 void get_variables_value_float(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		get_variable_value_float(&variables[i]);
 }
 
@@ -341,7 +356,7 @@ void set_variable_value_float(OPCUA_Variable* variable)
 
 void set_variables_value_float(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		set_variable_value_float(&variables[i]);
 }
 
@@ -352,7 +367,7 @@ void get_variable_value_int16(OPCUA_Variable* variable)
 
 void get_variables_value_int16(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		get_variable_value_int16(&variables[i]);
 }
 
@@ -363,7 +378,7 @@ void set_variable_value_int16(OPCUA_Variable* variable)
 
 void set_variables_value_int16(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		set_variable_value_int16(&variables[i]);
 }
 
@@ -374,7 +389,7 @@ void get_variable_value_int32(OPCUA_Variable* variable)
 
 void get_variables_value_int32(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		get_variable_value_int32(&variables[i]);
 }
 
@@ -385,7 +400,7 @@ void set_variable_value_int32(OPCUA_Variable* variable)
 
 void set_variables_value_int32(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		set_variable_value_int32(&variables[i]);
 }
 
@@ -396,7 +411,7 @@ void get_variable_value_int64(OPCUA_Variable* variable)
 
 void get_variables_value_int64(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		get_variable_value_int64(&variables[i]);
 }
 
@@ -407,7 +422,7 @@ void set_variable_value_int64(OPCUA_Variable* variable)
 
 void set_variables_value_int64(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		set_variable_value_int64(&variables[i]);
 }
 
@@ -418,7 +433,7 @@ void get_variable_value_local_text(OPCUA_Variable* variable)
 
 void get_variables_value_local_text(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		get_variable_value_local_text(&variables[i]);
 }
 
@@ -429,7 +444,7 @@ void set_variable_value_local_text(OPCUA_Variable* variable)
 
 void set_variables_value_local_text(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		set_variable_value_local_text(&variables[i]);
 }
 
@@ -440,7 +455,7 @@ void get_variable_value_sbyte(OPCUA_Variable* variable)
 
 void get_variables_value_sbyte(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		get_variable_value_sbyte(&variables[i]);
 }
 
@@ -451,7 +466,7 @@ void set_variable_value_sbyte(OPCUA_Variable* variable)
 
 void set_variables_value_sbyte(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		set_variable_value_sbyte(&variables[i]);
 }
 
@@ -462,7 +477,7 @@ void get_variable_value_uint16(OPCUA_Variable* variable)
 
 void get_variables_value_uint16(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		get_variable_value_uint16(&variables[i]);
 }
 
@@ -473,7 +488,7 @@ void set_variable_value_uint16(OPCUA_Variable* variable)
 
 void set_variables_value_uint16(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		set_variable_value_uint16(&variables[i]);
 }
 
@@ -484,7 +499,7 @@ void get_variable_value_uint32(OPCUA_Variable* variable)
 
 void get_variables_value_uint32(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		get_variable_value_uint32(&variables[i]);
 }
 
@@ -495,6 +510,11 @@ void set_variable_value_uint32(OPCUA_Variable* variable)
 
 void set_variables_value_uint32(OPCUA_Variable* variables, size_t count)
 {
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 		set_variable_value_uint32(&variables[i]);
+}
+
+void subscribe_datachange(OPCUA_Variable* variable, void(*callback)(OPCUA_Variable))
+{
+	
 }

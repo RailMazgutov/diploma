@@ -3,6 +3,8 @@
 
 #include "stdafx.h"
 #include "server.h"
+#include <chrono>
+#include <thread>
 
 int main()
 {
@@ -20,17 +22,44 @@ int main()
 	namespaces[2] = create_namespace("Service");
 	namespaces[3] = create_namespace("Meta");
 
+
 	OPCUA_Node main_parameters;
 	main_parameters.namespace_id = namespaces[0];
 	main_parameters.has_parent_node = false;
 	nodes_core_1[0] = add_node(main_parameters, "INFO");
 
+	OPCUA_Variable variable;
+	variable.namespace_id = namespaces[0];
+	variable.parent_id = nodes_core_1[0];
+	variable.name= "TEST";
+	variable.type = OPCUA_INT32;
+	add_variable(&variable);
+	
 	main_parameters.namespace_id = namespaces[1];
 	nodes_core_2[0] = add_node(main_parameters, "INFO");
 
+	OPCUA_Variable variable2;
+	variable2.namespace_id = namespaces[1];
+	variable2.parent_id = nodes_core_2[0];
+	variable2.name = "TEST";
+	variable2.type = OPCUA_INT32;
+	add_variable(&variable2);
+
+	
+	int val = 0;
+	variable.value.int32_val = val;
+	variable2.value.int32_val = val;
 	while(true)
 	{		
+		set_variable_value_int32(&variable);
 		
+		variable.value.int32_val = val;
+		if (val % 2 == 0) {
+			variable2.value.int32_val = val / 2;
+			set_variable_value_int32(&variable2);
+		}
+		++val;
+		std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 	}
 	stop_server();
 	return 0;
