@@ -282,6 +282,7 @@ void set_variable_value(OPCUA_Variable* variable)
 	value.Status = StatusCode(variable->data.status);
 	value.SourceTimestamp = DateTime(variable->data.timestamp);
 	value.SourcePicoseconds = variable->data.picoseconds;
+	value.Encoding = DATA_VALUE;
 	switch (variable->data.type)
 	{
 	case(OPCUA_BOOLEAN): {
@@ -356,6 +357,7 @@ void set_variable_value_boolean(OPCUA_Variable* variable)
 	value.SourceTimestamp = DateTime(variable->data.timestamp);
 	value.SourcePicoseconds = variable->data.picoseconds;
 	value.Value = variable->data.value.bool_val;
+	value.Encoding = DATA_VALUE;
 	variables[variable->id].SetValue(value);
 }
 
@@ -383,6 +385,7 @@ void set_variable_value_byte(OPCUA_Variable* variable)
 	value.SourceTimestamp = DateTime(variable->data.timestamp);
 	value.SourcePicoseconds = variable->data.picoseconds;
 	value.Value = variable->data.value.byte_val;
+	value.Encoding = DATA_VALUE;
 	variables[variable->id].SetValue(value);
 }
 
@@ -411,6 +414,7 @@ void set_variable_value_double(OPCUA_Variable* variable)
 	value.SourceTimestamp = DateTime(variable->data.timestamp);
 	value.SourcePicoseconds = variable->data.picoseconds;
 	value.Value = variable->data.value.double_val;
+	value.Encoding = DATA_VALUE;
 	variables[variable->id].SetValue(value);
 }
 
@@ -438,6 +442,7 @@ void set_variable_value_float(OPCUA_Variable* variable)
 	value.SourceTimestamp = DateTime(variable->data.timestamp);
 	value.SourcePicoseconds = variable->data.picoseconds;
 	value.Value = variable->data.value.float_val;
+	value.Encoding = DATA_VALUE;
 	variables[variable->id].SetValue(value);
 }
 
@@ -465,6 +470,7 @@ void set_variable_value_int16(OPCUA_Variable* variable)
 	value.SourceTimestamp = DateTime(variable->data.timestamp);
 	value.SourcePicoseconds = variable->data.picoseconds;
 	value.Value = variable->data.value.int16_val;
+	value.Encoding = DATA_VALUE;
 	variables[variable->id].SetValue(value);
 }
 
@@ -492,6 +498,7 @@ void set_variable_value_int32(OPCUA_Variable* variable)
 	value.SourceTimestamp = DateTime(variable->data.timestamp);
 	value.SourcePicoseconds = variable->data.picoseconds;
 	value.Value = variable->data.value.int32_val;
+	value.Encoding = DATA_VALUE;
 	variables[variable->id].SetValue(value);
 }
 
@@ -519,6 +526,7 @@ void set_variable_value_int64(OPCUA_Variable* variable)
 	value.SourceTimestamp = DateTime(variable->data.timestamp);
 	value.SourcePicoseconds = variable->data.picoseconds;
 	value.Value = variable->data.value.int64_val;
+	value.Encoding = DATA_VALUE;
 	variables[variable->id].SetValue(value);
 }
 
@@ -546,6 +554,7 @@ void set_variable_value_local_text(OPCUA_Variable* variable)
 	value.SourceTimestamp = DateTime(variable->data.timestamp);
 	value.SourcePicoseconds = variable->data.picoseconds;
 	value.Value = variable->data.value.local_text_val;
+	value.Encoding = DATA_VALUE;
 	variables[variable->id].SetValue(value);
 }
 
@@ -573,6 +582,7 @@ void set_variable_value_sbyte(OPCUA_Variable* variable)
 	value.SourceTimestamp = DateTime(variable->data.timestamp);
 	value.SourcePicoseconds = variable->data.picoseconds;
 	value.Value = variable->data.value.sbyte_val;
+	value.Encoding = DATA_VALUE;
 	variables[variable->id].SetValue(value);
 }
 
@@ -600,6 +610,7 @@ void set_variable_value_uint16(OPCUA_Variable* variable)
 	value.SourceTimestamp = DateTime(variable->data.timestamp);
 	value.SourcePicoseconds = variable->data.picoseconds;
 	value.Value = variable->data.value.uint16_val;
+	value.Encoding = DATA_VALUE;
 	variables[variable->id].SetValue(value);
 }
 
@@ -627,6 +638,7 @@ void set_variable_value_uint32(OPCUA_Variable* variable)
 	value.SourceTimestamp = DateTime(variable->data.timestamp);
 	value.SourcePicoseconds = variable->data.picoseconds;
 	value.Value = variable->data.value.uint32_val;
+	value.Encoding = DATA_VALUE;
 	variables[variable->id].SetValue(value);
 }
 

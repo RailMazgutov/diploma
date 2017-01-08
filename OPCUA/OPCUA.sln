@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OPCUA", "OPCUA\OPCUA.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SERVER", "SERVER\SERVER.vcxproj", "{FA85D044-5970-488A-8182-44EE2FF68FFD}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CLIENT", "CLIENT\CLIENT.vcxproj", "{B5552C4C-FACC-4DB5-BE16-2EDDEFB267A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -41,6 +43,18 @@ Global
 		{FA85D044-5970-488A-8182-44EE2FF68FFD}.Release|x64.Build.0 = Release|x64
 		{FA85D044-5970-488A-8182-44EE2FF68FFD}.Release|x86.ActiveCfg = Release|Win32
 		{FA85D044-5970-488A-8182-44EE2FF68FFD}.Release|x86.Build.0 = Release|Win32
+		{B5552C4C-FACC-4DB5-BE16-2EDDEFB267A2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B5552C4C-FACC-4DB5-BE16-2EDDEFB267A2}.Debug|Win32.Build.0 = Debug|Win32
+		{B5552C4C-FACC-4DB5-BE16-2EDDEFB267A2}.Debug|x64.ActiveCfg = Debug|x64
+		{B5552C4C-FACC-4DB5-BE16-2EDDEFB267A2}.Debug|x64.Build.0 = Debug|x64
+		{B5552C4C-FACC-4DB5-BE16-2EDDEFB267A2}.Debug|x86.ActiveCfg = Debug|Win32
+		{B5552C4C-FACC-4DB5-BE16-2EDDEFB267A2}.Debug|x86.Build.0 = Debug|Win32
+		{B5552C4C-FACC-4DB5-BE16-2EDDEFB267A2}.Release|Win32.ActiveCfg = Release|Win32
+		{B5552C4C-FACC-4DB5-BE16-2EDDEFB267A2}.Release|Win32.Build.0 = Release|Win32
+		{B5552C4C-FACC-4DB5-BE16-2EDDEFB267A2}.Release|x64.ActiveCfg = Release|x64
+		{B5552C4C-FACC-4DB5-BE16-2EDDEFB267A2}.Release|x64.Build.0 = Release|x64
+		{B5552C4C-FACC-4DB5-BE16-2EDDEFB267A2}.Release|x86.ActiveCfg = Release|Win32
+		{B5552C4C-FACC-4DB5-BE16-2EDDEFB267A2}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -44,6 +44,10 @@ struct OPCUA_Namespace_Client
 	char*							name;
 };
 
-void connect_to_server(char* endpoint);
+void OPCUACLIENT_API connect_to_server(char* endpoint);
 
-void subscribe_datachange(void(*callback)(const OPCUA_Variable*));
+void OPCUACLIENT_API disconnect_from_server();
+
+void OPCUACLIENT_API subscribe_datachange_client(void(*callback)(const OPCUA_Variable*));
+
+OPCUA_Node_Client OPCUACLIENT_API get_main_node();
