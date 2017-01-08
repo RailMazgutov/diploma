@@ -149,56 +149,67 @@ size_t add_variable(OPCUA_Variable* variable, char* name)
 	case(OPCUA_BOOLEAN): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.bool_val));
+		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_BOOLEAN)));
 		break;
 	}
 	case(OPCUA_BYTE): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.byte_val));
+		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_BYTE)));
 		break;
 	}
 	case(OPCUA_DOUBLE): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.double_val));
+		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_DOUBLE)));
 		break;
 	}
 	case(OPCUA_FLOAT): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.float_val));
+		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_FLOAT)));
 		break;
 	}
 	case(OPCUA_INT16): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.int16_val));
+		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_INT16)));
 		break;
 	}
 	case(OPCUA_INT32): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.int32_val));
+		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_INT32)));
 		break;
 	}
 	case(OPCUA_INT64): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.int64_val));
+		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_INT64)));
 		break;
 	}
 	case(OPCUA_LOCAL_TEXT): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.local_text_val));
+		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_LOCAL_TEXT)));
 		break;
 	}
 	case(OPCUA_S_BYTE): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.sbyte_val));
+		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_S_BYTE)));
 		break;
 	}
 	case(OPCUA_UNIT16): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.uint16_val));
+		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_UNIT16)));
 		break;
 	}
 	case(OPCUA_UINT32): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.uint32_val));
+		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_UINT32)));
 		break;
 	}
 	default: break;
