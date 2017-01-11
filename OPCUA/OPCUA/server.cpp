@@ -28,59 +28,62 @@ class SubClient : public SubscriptionHandler
 		OPCUA_Variable* variable = &handle_to_var[handle];
 		
 		DataValue data = node.GetDataValue();
-		variable->data.timestamp = data.SourceTimestamp.Value;
-		variable->data.picoseconds = data.SourcePicoseconds;
-		variable->data.status = opcua_status(data.Status);
-		switch (variable->data.type)
+		
+		Variant value = data.Value;		
+		switch (value.Type())
 		{
-		case(OPCUA_BOOLEAN): {
+		case(VariantType::BOOLEAN): {
 			variable->data.value.bool_val = node.GetValue().As<Boolean>();
 			break;
 		}
-		case(OPCUA_BYTE): {
+		case(VariantType::BYTE): {
 			variable->data.value.byte_val = node.GetValue().As<Byte>();
 			break;
 		}
-		case(OPCUA_DOUBLE): {
+		case(VariantType::DOUBLE): {
 			variable->data.value.double_val = node.GetValue().As<Double>();
 			break;
 		}
-		case(OPCUA_FLOAT): {
+		case(VariantType::FLOAT): {
 			variable->data.value.float_val = node.GetValue().As<Float>();
 			break;
 		}
-		case(OPCUA_INT16): {
+		case(VariantType::INT16): {
 			variable->data.value.int16_val = node.GetValue().As<Int16>();
 			break;
 		}
-		case(OPCUA_INT32): {
+		case(VariantType::INT32): {
 			variable->data.value.int32_val = node.GetValue().As<Int32>();
 			break;
 		}
-		case(OPCUA_INT64): {
+		case(VariantType::INT64): {
 			variable->data.value.int64_val = node.GetValue().As<Int64>();
 			break;
 		}
-		case(OPCUA_LOCAL_TEXT): {
+		case(VariantType::LOCALIZED_TEXT): {
 			variable->data.value.local_text_val = node.GetValue().As<LocalText>();
 			break;
 		}
-		case(OPCUA_S_BYTE): {
+		case(VariantType::SBYTE): {
 			variable->data.value.sbyte_val = node.GetValue().As<sByte>();
 			break;
 		}
-		case(OPCUA_UNIT16): {
+		case(VariantType::UINT16): {
 			variable->data.value.uint16_val = node.GetValue().As<UInt16>();
 			break;
 		}
-		case(OPCUA_UINT32): {
+		case(VariantType::UINT32): {
 			variable->data.value.uint32_val = node.GetValue().As<UInt32>();
 			break;
 		}
+		default: {
+			return;
 		}
+		}
+		variable->data.timestamp = data.SourceTimestamp.Value;
+		variable->data.picoseconds = data.SourcePicoseconds;
+		variable->data.status = opcua_status(data.Status);
 		callback_function(variable);
-		/*std::cout << "Received DataChange event, value of Node " << node << " is now: " << val.ToString() << std::endl;
-		std::cout << "handle " << handle << std::endl;*/
 	}
 };
 SubClient sclt;
@@ -148,68 +151,68 @@ size_t add_variable(OPCUA_Variable* variable, char* name)
 	{
 	case(OPCUA_BOOLEAN): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.bool_val));
-		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_BOOLEAN)));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, Variant(variable->data.value.bool_val)));
+		//variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_BOOLEAN)));
 		break;
 	}
 	case(OPCUA_BYTE): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.byte_val));
-		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_BYTE)));
+		//variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_BYTE)));
 		break;
 	}
 	case(OPCUA_DOUBLE): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.double_val));
-		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_DOUBLE)));
+		//variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_DOUBLE)));
 		break;
 	}
 	case(OPCUA_FLOAT): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.float_val));
-		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_FLOAT)));
+		//variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_FLOAT)));
 		break;
 	}
 	case(OPCUA_INT16): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.int16_val));
-		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_INT16)));
+		//variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_INT16)));
 		break;
 	}
 	case(OPCUA_INT32): {
 		variable->id = variables.size();
-		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.int32_val));
-		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_INT32)));
+		variables.push_back(parent.AddVariable(variable->namespace_id, name, Variant(variable->data.value.int32_val)));
+		//variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_INT32)));
 		break;
 	}
 	case(OPCUA_INT64): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.int64_val));
-		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_INT64)));
+		//variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_INT64)));
 		break;
 	}
 	case(OPCUA_LOCAL_TEXT): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.local_text_val));
-		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_LOCAL_TEXT)));
+		//variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_LOCAL_TEXT)));
 		break;
 	}
 	case(OPCUA_S_BYTE): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.sbyte_val));
-		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_S_BYTE)));
+		//variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_S_BYTE)));
 		break;
 	}
 	case(OPCUA_UNIT16): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.uint16_val));
-		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_UNIT16)));
+		//variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_UNIT16)));
 		break;
 	}
 	case(OPCUA_UINT32): {
 		variable->id = variables.size();
 		variables.push_back(parent.AddVariable(variable->namespace_id, name, variable->data.value.uint32_val));
-		variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_UINT32)));
+		//variables[variable->id].SetAttribute(AttributeId::DataType, DataValue(static_cast<int>(OPCUA_UINT32)));
 		break;
 	}
 	default: break;
