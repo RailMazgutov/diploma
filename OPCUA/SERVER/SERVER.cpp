@@ -6,14 +6,67 @@
 #include <chrono>
 #include <thread>
 #include <iostream>
+#include <vector>
 
 void callback_fcn(const OPCUA_Variable* variable)
 {
-	std::cout << "WORKS!!! for var: " << variable->id << std::endl;
+	std::cout << "Variable id: " << variable->id << std::endl;
+	std::cout << "Changed value, new value: ";
+	switch (variable->data.type)
+	{
+	case(OPCUA_BOOLEAN): {
+		std::cout << variable->data.value.bool_val << " - type BOOLEAN;" << std::endl;
+		break;
+	}
+	case(OPCUA_BYTE): {
+		std::cout << variable->data.value.byte_val << " - type BYTE;" << std::endl;
+		break;
+	}
+	case(OPCUA_DOUBLE): {
+		std::cout << variable->data.value.double_val << " - type DOUBLE;" << std::endl;
+		break;
+	}
+	case(OPCUA_FLOAT): {
+		std::cout << variable->data.value.float_val << " - type FLOAT;" << std::endl;
+		break;
+	}
+	case(OPCUA_INT16): {
+		std::cout << variable->data.value.int16_val << " - type INT16;" << std::endl;
+		break;
+	}
+	case(OPCUA_INT32): {
+		std::cout << variable->data.value.int32_val << " - type INT32;" << std::endl;
+		break;
+	}
+	case(OPCUA_INT64): {
+		std::cout << variable->data.value.int64_val << " - type INT64;" << std::endl;
+		break;
+	}
+	case(OPCUA_LOCAL_TEXT): {
+		std::cout << variable->data.value.local_text_val << " - type LOCAL_TEXT;" << std::endl;
+		break;
+	}
+	case(OPCUA_S_BYTE): {
+		std::cout << variable->data.value.sbyte_val << " - type sBYTE;" << std::endl;
+		break;
+	}
+	case(OPCUA_UNIT16): {
+		std::cout << variable->data.value.uint16_val << " - type UINT16;" << std::endl;
+		break;
+	}
+	case(OPCUA_UINT32): {
+		std::cout << variable->data.value.uint32_val << " - type UINT32;" << std::endl;
+		break;
+	}
+	default: break;
+	}
 }
+
+#pragma intrinsic(__rdtsc)
 
 int main()
 {
+	//set_endpoint("opc.tcp://10.7.46.121:4856/opcua/server");
 	set_endpoint("opc.tcp://localhost:4856/opcua/server");
 	set_server_uri("urn://eniko.ru");
 	size_t namespaces[4];
@@ -65,20 +118,44 @@ int main()
 	variable.data.value.int32_val = val;
 	variable2.data.value.int16_val = val;
 	variable3.data.value.bool_val = val % 2 == 0;
-	while(true)
+	unsigned __int64 i; 
+	std::vector<unsigned __int64> times;
+	times.reserve(100000);
+	while(val < 100000)
 	{		
+		i = __rdtsc();
 		set_variable_value_int32(&variable);
+		i = __rdtsc() - i;
+		times.push_back(i);
+		//std::cout << i << std::endl;
 		set_variable_value_boolean(&variable3);
-		variable.data.value.int32_val = val;
+		variable.data.value.int32_val = i;
 		if (val % 2 == 0) {
-			variable2.data.value.int16_val = val / 2;
+			i = __rdtsc();
+			variable2.data.value.int16_val = i / 1000;
 			set_variable_value_int32(&variable2);
 		}
-		++val;
+		val++;
 		variable3.data.value.bool_val = val % 2 == 0;
-		std::this_thread::sleep_for(std::chrono::milliseconds(20000));
+	}
+	unsigned __int64 average = 0;
+	unsigned __int64 max = 0;
+	unsigned __int64 min = times[0];
+	for (unsigned __int64 res : times)
+	{
+		average += res;
+		if (res > max)
+			max = res;
+
+		if (res < min)
+			res = min;
+
 	}
 	stop_server();
+	average /= 100000;
+	std::cout << "average: " << average << std::endl;
+	std::cout << "min: " << min << std::endl;
+	std::cout << "max: " << max << std::endl;
 	return 0;
 }
 

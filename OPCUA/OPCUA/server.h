@@ -276,7 +276,7 @@ extern "C" {
 		opcua_value				value;
 		opcua_status			status;
 		Int64					timestamp;
-		UInt16				picoseconds;
+		UInt16					picoseconds;
 	};
 	struct OPCUA_Variable
 	{

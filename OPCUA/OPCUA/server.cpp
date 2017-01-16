@@ -13,7 +13,6 @@ std::vector<Node> nodes;
 std::vector<Node> variables;
 std::vector<OPCUA_Variable> export_variables;
 std::map<uint32_t, OPCUA_Variable> handle_to_var;
-std::map<uint32_t, std::function<void(const OPCUA_Variable*)>> handle_to_callback;
 
 std::function<void(const OPCUA_Variable*)> callback_function;
 
@@ -27,8 +26,7 @@ class SubClient : public SubscriptionHandler
 	{
 		OPCUA_Variable* variable = &handle_to_var[handle];
 		
-		DataValue data = node.GetDataValue();
-		
+		DataValue data = node.GetDataValue();		
 		Variant value = data.Value;		
 		switch (value.Type())
 		{

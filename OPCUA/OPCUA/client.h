@@ -6,48 +6,50 @@
 #define OPCUACLIENT_API __declspec(dllimport) 
 #endif
 #include "server.h"
-struct OPCUA_BrowsePath
-{
-	UInt16							namespace_id;
-	char*							browse_name;
-};
+extern "C" {
+	struct OPCUA_BrowsePath
+	{
+		UInt16							namespace_id;
+		char*							name;
+	};
 
-struct OPCUA_Variable_Client
-{
-	size_t							id;
-	OPCUA_BrowsePath				path;
-	
-	OPCUA_DataValue					data;
+	struct OPCUA_Variable_Client
+	{
+		size_t							id;
+		OPCUA_BrowsePath				path;
 
-	bool							has_next;
-	OPCUA_Variable_Client*			next;
-};
+		OPCUA_DataValue					data;
 
-struct OPCUA_Node_Client
-{
-	size_t							id;
-	OPCUA_BrowsePath				path;
-	
-	bool							has_next;
-	OPCUA_Node_Client*				next;
+		bool							has_next;
+		OPCUA_Variable_Client*			next;
+	};
 
-	bool							has_child_node;
-	OPCUA_Node_Client*				child_node;
+	struct OPCUA_Node_Client
+	{
+		size_t							id;
+		OPCUA_BrowsePath				path;
 
-	bool							has_child_variables;
-	OPCUA_Variable_Client*			child;
-};
+		bool							has_next;
+		OPCUA_Node_Client*				next;
 
-struct OPCUA_Namespace_Client
-{
-	size_t							id;
-	char*							name;
-};
+		bool							has_child_node;
+		OPCUA_Node_Client*				child_node;
 
-void OPCUACLIENT_API connect_to_server(char* endpoint);
+		bool							has_child_variables;
+		OPCUA_Variable_Client*			child;
+	};
 
-void OPCUACLIENT_API disconnect_from_server();
+	struct OPCUA_Namespace_Client
+	{
+		size_t							id;
+		char*							name;
+	};
 
-void OPCUACLIENT_API subscribe_datachange_client(void(*callback)(const OPCUA_Variable*));
+	void OPCUACLIENT_API connect_to_server(char* endpoint);
 
-OPCUA_Node_Client OPCUACLIENT_API get_main_node();
+	void OPCUACLIENT_API disconnect_from_server();
+
+	void OPCUACLIENT_API subscribe_datachange_client(void(*callback)(const OPCUA_Variable_Client*));
+
+	OPCUA_Node_Client OPCUACLIENT_API get_main_node();
+}
