@@ -284,9 +284,9 @@ extern "C" {
 		OPCUA_DataValue		data;
 
 		//Для идентификации
-		unsigned int		id;
-		unsigned int		parent_id;
-		unsigned int		namespace_id;
+		size_t		id;
+		size_t		parent_id;
+		size_t		namespace_id;
 	};
 
 	struct OPCUA_Node

@@ -62,6 +62,59 @@ void callback_fcn(const OPCUA_Variable_Client* variable)
 	}
 }
 
+void set_correct_value(OPCUA_Variable_Client* variable)
+{
+	switch (variable->data.type)
+	{
+	case(OPCUA_BOOLEAN): {
+		variable->data.value.bool_val = !variable->data.value.bool_val;
+		break;
+	}
+	case(OPCUA_BYTE): {
+		variable->data.value.byte_val = ++variable->data.value.byte_val;
+		break;
+	}
+	case(OPCUA_DOUBLE): {
+		variable->data.value.double_val +=0.1;
+		break;
+	}
+	case(OPCUA_FLOAT): {
+		
+		break;
+	}
+	case(OPCUA_INT16): {
+		variable->data.value.int16_val += 2;
+		break;
+	}
+	case(OPCUA_INT32): {
+		variable->data.value.int32_val += 1;
+		break;
+	}
+	case(OPCUA_INT64): {
+		variable->data.value.int64_val += 3;
+		break;
+	}
+	case(OPCUA_LOCAL_TEXT): {
+		
+		break;
+	}
+	case(OPCUA_S_BYTE): {
+		
+		break;
+	}
+	case(OPCUA_UNIT16): {
+		variable->data.value.uint16_val += 2;
+		break;
+	}
+	case(OPCUA_UINT32): {
+		variable->data.value.uint32_val += 2;
+		break;
+	}
+	default: break;
+	}
+	set_value(variable);
+}
+
 int main()
 {	
 	subscribe_datachange_client(callback_fcn);
@@ -69,11 +122,48 @@ int main()
 	
 	//connect_to_server("opc.tcp://10.7.46.121:4856/opcua/server");
 	OPCUA_Node_Client main_node = get_main_node();
+	OPCUA_Variable_Client vars;
+	vars.has_next = false;
+	if (!main_node.has_child_node)
+		exit(-2);
+
+	OPCUA_Node_Client *first = main_node.child_node;
+	if (first->has_child_variables)
+	{
+		vars = *first->child;
+	}
+	else exit(-3);
+
+	while (first->has_next)
+	{
+		first = first->next;
+		if (first->has_child_variables)
+			if (vars.has_next)
+			{
+				OPCUA_Variable_Client* next = vars.next;
+				while(next->has_next)
+				{
+					next = next->next;
+				}
+				next->next = first->child;
+				next->has_next = true;
+			} else
+			{
+				vars = *first->child;
+			}
+	}
+
 	int c = 1;
 	while(c != 0)
 	{
-		std::cin >> c;
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+		OPCUA_Variable_Client* next = &vars;
+		while(next->has_next)
+		{
+			set_correct_value(next);
+			next = next->next;
+		}
+		set_correct_value(next);
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 	disconnect_from_server();
 	return 0;

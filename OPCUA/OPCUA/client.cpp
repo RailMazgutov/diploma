@@ -21,6 +21,7 @@ std::unique_ptr<Subscription> sub_client;
 std::function<void(const OPCUA_Variable_Client*)> subscription;
 
 OPCUA_Node_Client main_node;
+
 std::map<uint32_t, OPCUA_Variable_Client*> handle_to_var_client;
 
 class SubClientData : public SubscriptionHandler
@@ -118,6 +119,7 @@ void find_children(std::vector<Node> children, OPCUA_Node_Client* exp_parent)
 		if (rec_children.empty())
 		{
 			//Variable;
+			client_variables.push_back(child);
 			OPCUA_Variable_Client* exp_variable = new OPCUA_Variable_Client;
 			QualifiedName name = child.GetBrowseName();
 			if (!exp_parent->has_child_variables)
@@ -225,7 +227,7 @@ void find_children(std::vector<Node> children, OPCUA_Node_Client* exp_parent)
 
 			exp_node->id = exp_client_nodes.size();
 			exp_client_nodes.push_back(exp_node);
-
+			client_nodes.push_back(child);
 			exp_node->path.namespace_id = name.NamespaceIndex;
 			size_t size = name.Name.size();
 			exp_node->path.name = new char[size + 1];
@@ -237,14 +239,19 @@ void find_children(std::vector<Node> children, OPCUA_Node_Client* exp_parent)
 
 OPCUA_Node_Client get_main_node()
 {
-	main_mutex.lock();
+	main_node.has_child_node = false;
+	main_node.has_child_variables = false;
+	main_node.has_next = false;
 	Node objects = client.GetObjectsNode();
 	for (OpcUa::Node node : objects.GetChildren()) {
-		OPCUA_Node_Client* exp_node = new OPCUA_Node_Client;
 		QualifiedName name = node.GetBrowseName();
 		if (name.NamespaceIndex == 0)
 			continue;
 
+		OPCUA_Node_Client* exp_node = new OPCUA_Node_Client;
+		exp_node->has_child_node = false;
+		exp_node->has_child_variables = false;
+		exp_node->has_next = false;
 		if (!main_node.has_child_node)
 		{
 			main_node.has_child_node = true;
@@ -253,7 +260,7 @@ OPCUA_Node_Client get_main_node()
 		else
 		{
 			exp_node->has_next = true;
-			exp_node->next = main_node.next;
+			exp_node->next = main_node.child_node;
 		}
 		main_node.child_node = exp_node;
 
@@ -266,6 +273,67 @@ OPCUA_Node_Client get_main_node()
 		strncpy_s(exp_node->path.name, size+1, name.Name.c_str(), size);
 		find_children(node.GetChildren(), exp_node);
 	}
-	main_mutex.unlock();
 	return main_node;
+}
+
+void set_value(OPCUA_Variable_Client* variable)
+{
+	DataValue value;
+	value.Status = StatusCode(variable->data.status);
+	value.SourceTimestamp = DateTime(variable->data.timestamp);
+	value.SourcePicoseconds = variable->data.picoseconds;
+	value.Encoding = DATA_VALUE;
+	switch (variable->data.type)
+	{
+	case(OPCUA_BOOLEAN): {
+		value.Value = variable->data.value.bool_val;
+		break;
+	}
+	case(OPCUA_BYTE): {
+		value.Value = variable->data.value.byte_val;
+		break;
+	}
+	case(OPCUA_DOUBLE): {
+		value.Value = variable->data.value.double_val;
+		break;
+	}
+	case(OPCUA_FLOAT): {
+		value.Value = variable->data.value.float_val;
+		break;
+	}
+	case(OPCUA_INT16): {
+		value.Value = variable->data.value.int16_val;
+		break;
+	}
+	case(OPCUA_INT32): {
+		value.Value = variable->data.value.int32_val;
+		break;
+	}
+	case(OPCUA_INT64): {
+		value.Value = variable->data.value.int64_val;
+		break;
+	}
+	case(OPCUA_LOCAL_TEXT): {
+		value.Value = variable->data.value.local_text_val;
+		break;
+	}
+	case(OPCUA_S_BYTE): {
+		value.Value = variable->data.value.sbyte_val;
+		break;
+	}
+	case(OPCUA_UNIT16): {
+		value.Value = variable->data.value.uint16_val;
+		break;
+	}
+	case(OPCUA_UINT32): {
+		value.Value = variable->data.value.uint32_val;
+		break;
+	}
+	}
+	client_variables[variable->id].SetValue(value);
+}
+
+int get_variables_count()
+{
+	return client_variables.size();
 }

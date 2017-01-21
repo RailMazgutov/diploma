@@ -98,6 +98,7 @@
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
       <StackReserveSize>3000000</StackReserveSize>
+      <LargeAddressAware>true</LargeAddressAware>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -117,6 +118,7 @@
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
       <StackReserveSize>3000000</StackReserveSize>
+      <LargeAddressAware>true</LargeAddressAware>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -140,6 +142,7 @@
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
       <StackReserveSize>3000000</StackReserveSize>
+      <LargeAddressAware>true</LargeAddressAware>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -163,6 +166,7 @@
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
       <StackReserveSize>3000000</StackReserveSize>
+      <LargeAddressAware>true</LargeAddressAware>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

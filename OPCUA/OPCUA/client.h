@@ -52,4 +52,8 @@ extern "C" {
 	void OPCUACLIENT_API subscribe_datachange_client(void(*callback)(const OPCUA_Variable_Client*));
 
 	OPCUA_Node_Client OPCUACLIENT_API get_main_node();
+
+	void OPCUACLIENT_API set_value(OPCUA_Variable_Client* variable);
+
+	int OPCUASERVER_API get_variables_count();
 }

@@ -101,7 +101,7 @@ void set_server_uri(const char* uri)
 	server.SetServerURI(uri);
 }
 
-unsigned int create_namespace(char* name)
+size_t create_namespace(char* name)
 {
 	return server.RegisterNamespace(name);
 }
@@ -216,7 +216,7 @@ size_t add_variable(OPCUA_Variable* variable, char* name)
 	default: break;
 	}
 	auto handle = sub->SubscribeDataChange(variables[variable->id]);
-	handle_to_var.insert(std::pair<uint32_t, OPCUA_Variable>(handle, *variable));
+	//handle_to_var.insert(std::pair<uint32_t, OPCUA_Variable>(handle, *variable));
 	return variable->id;
 }
 
