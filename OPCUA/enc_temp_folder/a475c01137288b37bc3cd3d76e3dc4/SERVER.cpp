@@ -215,7 +215,6 @@ int main()
 	down_speed.data.type = OPCUA_DOUBLE;
 	down_speed.data.value.double_val = 1000;
 	add_variable(&down_speed, "Water Down Speed");
-	
 	std::thread down_water(downWater);
 	std::thread up_water(upWater);
 	//down_water.join();
